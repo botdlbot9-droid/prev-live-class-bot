@@ -9,4 +9,4 @@ services:
         sync: false
       - key: API_BASE
         value: https://video-play-api.newstreamcp.workers.dev/api
-    pythonVersion: 3.11
+    pythonVersion: 3.11.0
