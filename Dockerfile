@@ -2,17 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy requirements first for better caching
-COPY requirements.txt .
-
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install python-telegram-bot==20.6 requests==2.31.0
 
-# Copy bot code
 COPY bot.py .
 
-# Set environment variable
-ENV PYTHONUNBUFFERED=1
-
-# Run the bot
 CMD ["python", "bot.py"]
