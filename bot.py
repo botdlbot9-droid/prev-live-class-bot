@@ -173,17 +173,26 @@ def main():
         logger.error("BOT_TOKEN not set! Please set it in environment variables.")
         return
     
-    # Create the Application
-    application = Application.builder().token(BOT_TOKEN).build()
+    try:
+        # Create the Application with builder
+        application = (
+            Application.builder()
+            .token(BOT_TOKEN)
+            .build()
+        )
 
-    # Register handlers
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_email))
-    application.add_handler(CallbackQueryHandler(button_callback))
+        # Register handlers
+        application.add_handler(CommandHandler("start", start))
+        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_email))
+        application.add_handler(CallbackQueryHandler(button_callback))
 
-    # Start the Bot (Polling mode for Docker)
-    print("🤖 Bot is starting in polling mode...")
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+        # Start the Bot (Polling mode)
+        print("🤖 Bot is starting in polling mode...")
+        application.run_polling(allowed_updates=Update.ALL_TYPES)
+        
+    except Exception as e:
+        logger.error(f"Error starting bot: {e}")
+        print(f"Error: {e}")
 
 if __name__ == '__main__':
     main()
