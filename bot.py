@@ -1,8 +1,7 @@
 import os
 import logging
-import json
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 
@@ -14,10 +13,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ==================== CONFIG ====================
-# Cloudflare Worker API URL
 API_BASE = os.environ.get('API_BASE', 'https://video-play-api.newstreamcp.workers.dev/api')
-
-# Bot Token (from environment variable)
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
 # ==================== API FUNCTIONS ====================
@@ -185,15 +181,9 @@ def main():
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_email))
     application.add_handler(CallbackQueryHandler(button_callback))
 
-    # Start the Bot
-    print("🤖 Bot is starting...")
-    port = int(os.environ.get('PORT', 8080))
-    application.run_webhook(
-        listen="0.0.0.0",
-        port=port,
-        url_path=BOT_TOKEN,
-        webhook_url=f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}/{BOT_TOKEN}"
-    )
+    # Start the Bot (Polling mode for Docker)
+    print("🤖 Bot is starting in polling mode...")
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == '__main__':
     main()
