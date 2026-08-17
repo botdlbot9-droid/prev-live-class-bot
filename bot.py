@@ -1,7 +1,7 @@
 import os
 import logging
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 
@@ -170,16 +170,14 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     """Start the bot."""
     if not BOT_TOKEN:
-        logger.error("BOT_TOKEN not set! Please set it in environment variables.")
+        logger.error("BOT_TOKEN not set!")
+        print("❌ BOT_TOKEN not set! Please set it in environment variables.")
         return
     
     try:
-        # Create the Application with builder
-        application = (
-            Application.builder()
-            .token(BOT_TOKEN)
-            .build()
-        )
+        print("🤖 Starting bot...")
+        # Create the Application
+        application = Application.builder().token(BOT_TOKEN).build()
 
         # Register handlers
         application.add_handler(CommandHandler("start", start))
@@ -187,12 +185,12 @@ def main():
         application.add_handler(CallbackQueryHandler(button_callback))
 
         # Start the Bot (Polling mode)
-        print("🤖 Bot is starting in polling mode...")
+        print("✅ Bot is running in polling mode...")
         application.run_polling(allowed_updates=Update.ALL_TYPES)
         
     except Exception as e:
         logger.error(f"Error starting bot: {e}")
-        print(f"Error: {e}")
+        print(f"❌ Error: {e}")
 
 if __name__ == '__main__':
     main()
