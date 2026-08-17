@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: telegram-video-bot
+    runtime: docker
+    repo: https://github.com/botdlbot9-droid/prev-live-class-bot
+    branch: main
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: API_BASE
+        value: https://video-play-api.newstreamcp.workers.dev/api
